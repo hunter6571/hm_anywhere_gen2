@@ -9,10 +9,8 @@ Use owned HMs without needing to teach them to Pokémon in your party! Supports 
 - **Toggleable:** Turn contextual actions ON/OFF inside the `Start -> HM` menu.
 
 ## Installation
-1. Go to the [Releases](https://github.com/YOUR_USERNAME/hm_anywhere_gen2/releases) page and download `hm_anywhere_gen2.zip`.
-2. Extract or place the `.zip` file into your Gen2Recomped `mods` directory:
-   - **PC:** `%APPDATA%/Gen2Recomp/mods/`
-   - **Handhelds/Switch:** `/mods/` directory inside your Gen2Recomped folder.
+1. Go to the Releases page and download `hm_anywhere_gen2.zip`.
+2. Place the `.zip` file into your Gen2Recomped `mods` directory.
 3. Launch **Gen2Recomped** and ensure the mod is enabled in the mod manager.
 
 ## Credits

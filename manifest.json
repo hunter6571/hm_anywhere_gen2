@@ -1,0 +1,19 @@
+{
+  "id": "hm_anywhere_gen2",
+  "name": "HM Anywhere (Gen 2)",
+  "version": "1.2.1",
+  "api": 2,
+  "entry": "main.lua",
+  "profile": "content",
+  "category": "MECHANIC",
+  "game_version": ">=0.0.0-0 <2.0.0",
+  "priority": 610,
+  "affects_link": false,
+  "permissions": [
+    "engine_internals"
+  ],
+  "dependencies": [],
+  "optional_dependencies": [],
+  "conflicts": [],
+  "description": "Use owned HMs without teaching them in Gen2Recomp. All field HMs (including Whirlpool and Waterfall) are available from Start -> HM; contextual A-button actions can be toggled on/off."
+}

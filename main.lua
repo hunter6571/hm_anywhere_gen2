@@ -1,4 +1,4 @@
--- HM Anywhere v1.2 (Ported for Gen2Recomp)
+-- HM Anywhere v1.2.4 (Ported for Gen2Recomped)
 --
 -- Owning an HM item in your Bag allows field usage, provided a party member can learn it.
 
@@ -83,30 +83,41 @@ end
 -- -------------------------------------------------------------------------
 
 local function canLearnHM(game, mon, moveId)
-  if not (mon and mon.species) then return false end
+  if not (mon and mon.hp and mon.hp > 0) then return false end
 
-  -- Check pokedex definition for TM/HM learn flags
-  local pokedex = game and game.data and game.data.pokedex
-  local speciesDef = pokedex and pokedex[mon.species]
-  if speciesDef and speciesDef.tmhm and speciesDef.tmhm[moveId] ~= nil then
-    return speciesDef.tmhm[moveId] == true
+  -- 1. Check if native engine partyKnows logic considers the party compatible
+  local ow = game and game.overworld
+  local dispatch = rawget(_G, PATCH_KEY)
+  if ow and dispatch and dispatch.basePartyKnows then
+    local result = dispatch.basePartyKnows(ow, moveId)
+    if result then return true end
   end
 
-  -- Check item definitions for machine compatibility mapping
-  local items = game and game.data and game.data.items or {}
-  for _, def in pairs(items) do
-    if def.machine and def.machine.kind == "HM" and def.machine.move == moveId then
-      if def.machine.learners and def.machine.learners[mon.species] ~= nil then
-        return def.machine.learners[mon.species] == true
-      end
+  -- 2. Fallback: Check if the mon currently knows the move
+  if mon.moves then
+    for _, m in ipairs(mon.moves) do
+      local mid = type(m) == "table" and m.id or m
+      if mid == moveId then return true end
     end
   end
 
-  -- Fallback check on mon's naturally known moves
-  if mon.moves then
-    for _, m in ipairs(mon.moves) do
-      if (type(m) == "string" and m == moveId) or (type(m) == "table" and m.id == moveId) then
-        return true
+  -- 3. Fallback: Check pokedex definition for TM/HM flags
+  local species = mon.species or mon.speciesId
+  if species then
+    local pokedex = game and game.data and game.data.pokedex
+    local speciesDef = pokedex and (pokedex[species] or pokedex[tostring(species)])
+    if speciesDef and speciesDef.tmhm and speciesDef.tmhm[moveId] ~= nil then
+      return speciesDef.tmhm[moveId] == true
+    end
+
+    -- 4. Fallback: Check item definitions for machine compatibility
+    local items = game and game.data and game.data.items or {}
+    for _, def in pairs(items) do
+      if def.machine and def.machine.kind == "HM" and def.machine.move == moveId then
+        local learners = def.machine.learners
+        if learners and (learners[species] == true or learners[tostring(species)] == true) then
+          return true
+        end
       end
     end
   end

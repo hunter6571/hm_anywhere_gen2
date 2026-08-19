@@ -1,4 +1,4 @@
--- HM Anywhere v1.2.1 (Ported for Gen2Recomped)
+-- HM Anywhere v1.2.2 (Ported for Gen2Recomp)
 --
 -- Owning an HM item in your Bag allows field usage, provided a party member can learn it.
 
@@ -24,6 +24,16 @@ local FIELD_HMS = {
   WATERFALL  = true,
 }
 
+local HM_TO_MACHINE = {
+  CUT        = { "HM01" },
+  FLY        = { "HM02" },
+  SURF       = { "HM03" },
+  STRENGTH   = { "HM04" },
+  FLASH      = { "HM05" },
+  WHIRLPOOL  = { "HM06" },
+  WATERFALL  = { "HM07" },
+}
+
 local HM_ORDER = { "CUT", "FLY", "SURF", "STRENGTH", "FLASH", "WHIRLPOOL", "WATERFALL" }
 
 local HM_LABEL = {
@@ -36,6 +46,90 @@ local HM_LABEL = {
   WATERFALL  = "WTFL",
 }
 
+-- Comprehensive Gen II Learner Fallback Maps (Supports both IDs and Names)
+local HARDCODED_HM_LEARNERS = {
+  CUT = {
+    1, 2, 3, 4, 5, 6, 10, 11, 12, 15, 17, 18, 19, 20, 27, 28, 29, 30, 31, 32, 33, 34, 43, 44, 45, 46, 47,
+    52, 53, 69, 70, 71, 72, 73, 83, 84, 85, 98, 99, 102, 103, 108, 114, 115, 123, 127, 137, 151, 152, 153,
+    154, 158, 159, 160, 161, 162, 177, 178, 191, 192, 193, 207, 208, 212, 214, 215, 227, 233, 235, 251,
+    "BULBASAUR", "IVYSAUR", "VENUSAUR", "CHARMANDER", "CHARMELEON", "CHARIZARD", "CATERPIE", "METAPOD",
+    "BUTTERFREE", "BEEDRILL", "PIDGEOTTO", "PIDGEOT", "RATTATA", "RATICATE", "SANDSHREW", "SANDSLASH",
+    "NIDORAN_F", "NIDORINA", "NIDOQUEEN", "NIDORAN_M", "NIDORINO", "NIDOKING", "ODDISH", "GLOOM", "VILEPLUME",
+    "PARAS", "PARASECT", "MEOWTH", "PERSIAN", "BELLSPROUT", "WEEPINBELL", "VICTREEBEL", "TENTACOOL", "TENTACRUEL",
+    "FARFETCHD", "DODUO", "DODRIO", "KRABBY", "KINGLER", "EXEGGCUTE", "EXEGGUTOR", "LICKITUNG", "TANGELA",
+    "KANGASKHAN", "SCYTHER", "PINSIR", "PORYGON", "MEW", "CHIKORITA", "BAYLEEF", "MEGANIUM", "TOTODILE",
+    "CROCONAW", "FERALIGATR", "SENTRET", "FURRET", "NATU", "XATU", "SUNKERN", "SUNFLORA", "YANMA", "GLIGAR",
+    "STEELIX", "SCIZOR", "HERACROSS", "SNEASEL", "SKARMORY", "PORYGON2", "SMEARGLE", "CELEBI"
+  },
+  FLY = {
+    6, 16, 17, 18, 21, 22, 41, 42, 83, 84, 85, 142, 144, 145, 146, 149, 151, 163, 164, 169, 177, 178, 198,
+    225, 227, 235, 249, 250,
+    "CHARIZARD", "PIDGEY", "PIDGEOTTO", "PIDGEOT", "SPEAROW", "FEAROW", "ZUBAT", "GOLBAT", "FARFETCHD",
+    "DODUO", "DODRIO", "AERODACTYL", "ARTICUNO", "ZAPDOS", "MOLTRES", "DRAGONITE", "MEW", "HOOTHOOT",
+    "NOCTOWL", "CROBAT", "NATU", "XATU", "MURKROW", "DELIBIRD", "SKARMORY", "SMEARGLE", "LUGIA", "HO_OH"
+  },
+  SURF = {
+    7, 8, 9, 26, 31, 34, 54, 55, 60, 61, 62, 72, 73, 79, 80, 86, 87, 90, 91, 98, 99, 108, 111, 112, 115,
+    116, 117, 118, 119, 120, 121, 130, 131, 134, 138, 139, 140, 141, 143, 147, 148, 149, 151, 158, 159, 160,
+    161, 162, 170, 171, 183, 184, 194, 195, 199, 211, 222, 223, 224, 226, 230, 235, 243, 245, 246, 247, 248, 249,
+    "SQUIRTLE", "WARTORTLE", "BLASTOISE", "RAICHU", "NIDOQUEEN", "NIDOKING", "PSYDUCK", "GOLDUCK", "POLIWAG",
+    "POLIWHIRL", "POLIWRATH", "TENTACOOL", "TENTACRUEL", "SLOWPOKE", "SLOWBRO", "SEEL", "DEWGONG", "SHELLDER",
+    "CLOYSTER", "KRABBY", "KINGLER", "LICKITUNG", "RHYHORN", "RHYDON", "KANGASKHAN", "HORSEA", "SEADRA",
+    "GOLDEEN", "SEAKING", "STARYU", "STARMIE", "GYARADOS", "LAPRAS", "VAPOREON", "OMANYTE", "OMASTAR",
+    "KABUTO", "KABUTOPS", "SNORLAX", "DRATINI", "DRAGONAIR", "DRAGONITE", "MEW", "TOTODILE", "CROCONAW",
+    "FERALIGATR", "SENTRET", "FURRET", "CHINCHOU", "LANTURN", "MARILL", "AZUMARILL", "WOOPER", "QUAGSIRE",
+    "SLOWKING", "QWILFISH", "CORSOLA", "REMORAID", "OCTILLERY", "MANTINE", "KINGDRA", "SMEARGLE", "RAIKOU",
+    "SUICUNE", "LARVITAR", "PUPITAR", "TYRANITAR", "LUGIA"
+  },
+  STRENGTH = {
+    3, 6, 9, 28, 31, 34, 56, 57, 62, 66, 67, 68, 74, 75, 76, 80, 88, 89, 95, 99, 105, 106, 107, 108, 111,
+    112, 113, 115, 121, 125, 126, 127, 128, 130, 131, 143, 149, 150, 151, 154, 157, 160, 162, 181, 184, 185,
+    190, 195, 199, 208, 209, 210, 212, 214, 215, 217, 221, 222, 229, 232, 233, 235, 241, 242, 243, 244, 245,
+    248, 249, 250,
+    "VENUSAUR", "CHARIZARD", "BLASTOISE", "SANDSLASH", "NIDOQUEEN", "NIDOKING", "MANKEY", "PRIMEAPE", "POLIWRATH",
+    "MACHOP", "MACHOKE", "MACHAMP", "GEODUDE", "GRAVELER", "GOLEM", "SLOWBRO", "GRIMER", "MUK", "ONIX",
+    "KINGLER", "MAROWAK", "HITMONLEE", "HITMONCHAN", "LICKITUNG", "RHYHORN", "RHYDON", "CHANSEY", "KANGASKHAN",
+    "STARMIE", "ELECTABUZZ", "MAGMAR", "PINSIR", "TAUROS", "GYARADOS", "LAPRAS", "SNORLAX", "DRAGONITE",
+    "MEWTWO", "MEW", "MEGANIUM", "TYPHLOSION", "FERALIGATR", "FURRET", "AMPHAROS", "AZUMARILL", "SUDOWOODO",
+    "AIPOM", "QUAGSIRE", "SLOWKING", "STEELIX", "SNUBBULL", "GRANBULL", "SCIZOR", "HERACROSS", "SNEASEL",
+    "URSARING", "PILOSWINE", "CORSOLA", "HOUNDOOM", "DONPHAN", "PORYGON2", "SMEARGLE", "MILTANK", "BLISSEY",
+    "RAIKOU", "ENTEI", "SUICUNE", "TYRANITAR", "LUGIA", "HO_OH"
+  },
+  FLASH = {
+    25, 26, 35, 36, 39, 40, 46, 47, 48, 49, 52, 53, 54, 55, 63, 64, 65, 79, 80, 81, 82, 96, 97, 100, 101,
+    102, 103, 113, 120, 121, 122, 124, 125, 126, 137, 150, 151, 152, 153, 154, 172, 173, 174, 175, 176, 179,
+    180, 181, 182, 183, 184, 191, 192, 194, 195, 196, 197, 199, 203, 206, 209, 210, 223, 224, 233, 234, 235,
+    239, 240, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251,
+    "PIKACHU", "RAICHU", "CLEFAIRY", "CLEFABLE", "JIGGLYPUFF", "WIGGLYTUFF", "PARAS", "PARASECT", "VENONAT",
+    "VENOMOTH", "MEOWTH", "PERSIAN", "PSYDUCK", "GOLDUCK", "ABRA", "KADABRA", "ALAKAZAM", "SLOWPOKE", "SLOWBRO",
+    "MAGNEMITE", "MAGNETON", "DROWZEE", "HYPNO", "VOLTORB", "ELECTRODE", "EXEGGCUTE", "EXEGGUTOR", "CHANSEY",
+    "STARYU", "STARMIE", "MR_MIME", "JYNX", "ELECTABUZZ", "MAGMAR", "PORYGON", "MEWTWO", "MEW", "CHIKORITA",
+    "BAYLEEF", "MEGANIUM", "PICHU", "CLEFFA", "IGGLYBUFF", "TOGEPI", "TOGETIC", "MAREEP", "FLAAFFY", "AMPHAROS",
+    "BELLOSSOM", "MARILL", "AZUMARILL", "SUNKERN", "SUNFLORA", "WOOPER", "QUAGSIRE", "ESPEON", "UMBREON", "SLOWKING",
+    "GIRAFARIG", "DUNSPARCE", "SNUBBULL", "GRANBULL", "REMORAID", "OCTILLERY", "PORYGON2", "STANTLER", "SMEARGLE",
+    "ELEKID", "MAGBY", "BLISSEY", "RAIKOU", "ENTEI", "SUICUNE", "LARVITAR", "PUPITAR", "TYRANITAR", "LUGIA",
+    "HO_OH", "CELEBI"
+  },
+  WHIRLPOOL = {
+    7, 8, 9, 54, 55, 60, 61, 62, 72, 73, 86, 87, 90, 91, 98, 99, 116, 117, 118, 119, 120, 121, 130, 131,
+    138, 139, 140, 141, 151, 158, 159, 160, 170, 171, 183, 184, 194, 195, 211, 222, 223, 224, 226, 230, 235, 245, 249,
+    "SQUIRTLE", "WARTORTLE", "BLASTOISE", "PSYDUCK", "GOLDUCK", "POLIWAG", "POLIWHIRL", "POLIWRATH", "TENTACOOL",
+    "TENTACRUEL", "SEEL", "DEWGONG", "SHELLDER", "CLOYSTER", "KRABBY", "KINGLER", "HORSEA", "SEADRA", "GOLDEEN",
+    "SEAKING", "STARYU", "STARMIE", "GYARADOS", "LAPRAS", "OMANYTE", "OMASTAR", "KABUTO", "KABUTOPS", "MEW",
+    "TOTODILE", "CROCONAW", "FERALIGATR", "CHINCHOU", "LANTURN", "MARILL", "AZUMARILL", "WOOPER", "QUAGSIRE",
+    "QWILFISH", "CORSOLA", "REMORAID", "OCTILLERY", "MANTINE", "KINGDRA", "SMEARGLE", "SUICUNE", "LUGIA"
+  },
+  WATERFALL = {
+    7, 8, 9, 54, 55, 60, 61, 62, 72, 73, 86, 87, 116, 117, 118, 119, 120, 121, 130, 131, 147, 148, 149,
+    151, 158, 159, 160, 170, 171, 183, 184, 194, 195, 211, 222, 223, 224, 226, 230, 235, 245, 249,
+    "SQUIRTLE", "WARTORTLE", "BLASTOISE", "PSYDUCK", "GOLDUCK", "POLIWAG", "POLIWHIRL", "POLIWRATH", "TENTACOOL",
+    "TENTACRUEL", "SEEL", "DEWGONG", "HORSEA", "SEADRA", "GOLDEEN", "SEAKING", "STARYU", "STARMIE", "GYARADOS",
+    "LAPRAS", "DRATINI", "DRAGONAIR", "DRAGONITE", "MEW", "TOTODILE", "CROCONAW", "FERALIGATR", "CHINCHOU",
+    "LANTURN", "MARILL", "AZUMARILL", "WOOPER", "QUAGSIRE", "QWILFISH", "CORSOLA", "REMORAID", "OCTILLERY",
+    "MANTINE", "KINGDRA", "SMEARGLE", "SUICUNE", "LUGIA"
+  }
+}
+
 local function hasCount(value)
   if type(value) == "number" then return value > 0 end
   return value == true
@@ -44,12 +138,13 @@ end
 local function ownedHM(game, moveId)
   local inventory = game and game.save and game.save.inventory or {}
   local items = game and game.data and game.data.items or {}
+  
+  local targetHM = HM_TO_MACHINE[moveId] and HM_TO_MACHINE[moveId][1]
+
   for itemId, count in pairs(inventory) do
     if hasCount(count) then
-      local def = items[itemId]
-      local machine = def and def.machine
-      if machine and machine.kind == "HM" and machine.move == moveId then
-        return itemId, def
+      if itemId == targetHM or (items[itemId] and items[itemId].machine and items[itemId].machine.move == moveId) then
+        return itemId, items[itemId]
       end
     end
   end
@@ -79,45 +174,102 @@ local function hasBadge(game, moveId)
 end
 
 -- -------------------------------------------------------------------------
--- Compatibility & Party Helpers
+-- Ultra-Robust Multi-Key Compatibility Checker
 -- -------------------------------------------------------------------------
 
+local function isFainted(mon)
+  if not mon then return true end
+  if type(mon.hp) == "number" then return mon.hp <= 0 end
+  if type(mon.currentHp) == "number" then return mon.currentHp <= 0 end
+  if type(mon.current_hp) == "number" then return mon.current_hp <= 0 end
+  return false
+end
+
 local function canLearnHM(game, mon, moveId)
-  if not (mon and mon.hp and mon.hp > 0) then return false end
+  if isFainted(mon) then return false end
 
-  -- 1. Check if native engine partyKnows logic considers the party compatible
-  local ow = game and game.overworld
-  local dispatch = rawget(_G, PATCH_KEY)
-  if ow and dispatch and dispatch.basePartyKnows then
-    local result = dispatch.basePartyKnows(ow, moveId)
-    if result then return true end
-  end
-
-  -- 2. Fallback: Check if the mon currently knows the move
+  -- 1. Check actively equipped moveset
   if mon.moves then
     for _, m in ipairs(mon.moves) do
-      local mid = type(m) == "table" and m.id or m
-      if mid == moveId then return true end
+      local mid = type(m) == "table" and (m.id or m.move or m.name) or m
+      if mid == moveId or (type(mid) == "string" and mid:upper() == moveId) then 
+        return true 
+      end
     end
   end
 
-  -- 3. Fallback: Check pokedex definition for TM/HM flags
-  local species = mon.species or mon.speciesId
-  if species then
-    local pokedex = game and game.data and game.data.pokedex
-    local speciesDef = pokedex and (pokedex[species] or pokedex[tostring(species)])
-    if speciesDef and speciesDef.tmhm and speciesDef.tmhm[moveId] ~= nil then
-      return speciesDef.tmhm[moveId] == true
+  -- Extract all possible key forms for species identifier
+  local rawSpecies = mon.species or mon.speciesId or mon.def or mon.id or mon.name or mon.species_id
+  local candidateKeys = {}
+
+  if type(rawSpecies) == "table" then
+    if rawSpecies.id then table.insert(candidateKeys, rawSpecies.id) end
+    if rawSpecies.name then table.insert(candidateKeys, rawSpecies.name) end
+    if rawSpecies.species then table.insert(candidateKeys, rawSpecies.species) end
+    if rawSpecies.nationalPokedexNumber then table.insert(candidateKeys, rawSpecies.nationalPokedexNumber) end
+    if rawSpecies.dexNo then table.insert(candidateKeys, rawSpecies.dexNo) end
+  elseif rawSpecies then
+    table.insert(candidateKeys, rawSpecies)
+  end
+
+  local searchMap = {}
+  for _, k in ipairs(candidateKeys) do
+    searchMap[k] = true
+    local s = tostring(k):upper()
+    searchMap[s] = true
+    searchMap[s:lower()] = true
+    
+    -- Strip common enum prefixes if present (e.g., SPECIES_BAYLEEF -> BAYLEEF)
+    if s:find("^SPECIES_") then
+      local clean = s:gsub("^SPECIES_", "")
+      searchMap[clean] = true
+      searchMap[clean:lower()] = true
     end
 
-    -- 4. Fallback: Check item definitions for machine compatibility
-    local items = game and game.data and game.data.items or {}
-    for _, def in pairs(items) do
-      if def.machine and def.machine.kind == "HM" and def.machine.move == moveId then
-        local learners = def.machine.learners
-        if learners and (learners[species] == true or learners[tostring(species)] == true) then
-          return true
+    local n = tonumber(k)
+    if n then searchMap[n] = true end
+  end
+
+  -- Move Targets (FLASH, HM05, etc.)
+  local moveTargets = { [moveId] = true, [moveId:lower()] = true }
+  if HM_TO_MACHINE[moveId] then
+    for _, mCode in ipairs(HM_TO_MACHINE[moveId]) do
+      moveTargets[mCode] = true
+      moveTargets[mCode:lower()] = true
+    end
+  end
+
+  -- 2. Engine Pokedex Dynamic Inspection
+  local pokedex = game and game.data and game.data.pokedex
+  if type(pokedex) == "table" then
+    for targetKey in pairs(searchMap) do
+      local entry = pokedex[targetKey]
+      if entry then
+        local tmhmTable = entry.tmhm or entry.tms or entry.machines or entry.learnable_tms
+        if type(tmhmTable) == "table" then
+          for tKey in pairs(moveTargets) do
+            if tmhmTable[tKey] == true or tmhmTable[tKey] == 1 then
+              return true
+            end
+          end
+          -- Array check if engine stores learnable moves as a list of strings
+          for _, val in ipairs(tmhmTable) do
+            local sVal = tostring(val):upper()
+            if moveTargets[sVal] or sVal == moveId then
+              return true
+            end
+          end
         end
+      end
+    end
+  end
+
+  -- 3. Hardcoded Learners Fallback Check
+  local fallbackList = HARDCODED_HM_LEARNERS[moveId]
+  if fallbackList then
+    for _, learnerKey in ipairs(fallbackList) do
+      if searchMap[learnerKey] or searchMap[tostring(learnerKey):upper()] then
+        return true
       end
     end
   end
@@ -128,7 +280,7 @@ end
 local function getEligibleMon(game, moveId)
   local party = game and game.save and game.save.party or {}
   for _, mon in ipairs(party) do
-    if (mon.hp or 0) > 0 and canLearnHM(game, mon, moveId) then
+    if canLearnHM(game, mon, moveId) then
       return mon
     end
   end
@@ -182,9 +334,7 @@ local function tryStrength(game, ow)
     return true
   end
 
-  if not getEligibleMon(game, "STRENGTH") then
-    return false
-  end
+  if not getEligibleMon(game, "STRENGTH") then return false end
 
   local function pushNow()
     if not (ow.map and ow.player) then return end

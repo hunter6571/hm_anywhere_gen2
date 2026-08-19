@@ -1,4 +1,4 @@
--- HM Anywhere v1.2.4 (Ported for Gen2Recomped)
+-- HM Anywhere v1.2.1 (Ported for Gen2Recomped)
 --
 -- Owning an HM item in your Bag allows field usage, provided a party member can learn it.
 

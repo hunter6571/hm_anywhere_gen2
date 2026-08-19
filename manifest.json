@@ -1,7 +1,7 @@
 {
   "id": "hm_anywhere_gen2",
   "name": "HM Anywhere (Gen 2)",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "api": 2,
   "entry": "main.lua",
   "profile": "content",

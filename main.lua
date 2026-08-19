@@ -1,6 +1,6 @@
--- HM Anywhere v1.2.3 (Ported for Gen2Recomped)
+-- HM Anywhere v1.2 (Ported for Gen2Recomp)
 --
--- Owning an HM item in your Bag is enough to use its field action.
+-- Owning an HM item in your Bag allows field usage, provided a party member can learn it.
 
 local PATCH_KEY = "__hm_anywhere_gen2_dispatch_v1"
 
@@ -78,12 +78,50 @@ local function hasBadge(game, moveId)
   return hasCount(inventory[badge])
 end
 
-local function fieldHelper(game)
+-- -------------------------------------------------------------------------
+-- Compatibility & Party Helpers
+-- -------------------------------------------------------------------------
+
+local function canLearnHM(game, mon, moveId)
+  if not (mon and mon.species) then return false end
+
+  -- Check pokedex definition for TM/HM learn flags
+  local pokedex = game and game.data and game.data.pokedex
+  local speciesDef = pokedex and pokedex[mon.species]
+  if speciesDef and speciesDef.tmhm and speciesDef.tmhm[moveId] ~= nil then
+    return speciesDef.tmhm[moveId] == true
+  end
+
+  -- Check item definitions for machine compatibility mapping
+  local items = game and game.data and game.data.items or {}
+  for _, def in pairs(items) do
+    if def.machine and def.machine.kind == "HM" and def.machine.move == moveId then
+      if def.machine.learners and def.machine.learners[mon.species] ~= nil then
+        return def.machine.learners[mon.species] == true
+      end
+    end
+  end
+
+  -- Fallback check on mon's naturally known moves
+  if mon.moves then
+    for _, m in ipairs(mon.moves) do
+      if (type(m) == "string" and m == moveId) or (type(m) == "table" and m.id == moveId) then
+        return true
+      end
+    end
+  end
+
+  return false
+end
+
+local function getEligibleMon(game, moveId)
   local party = game and game.save and game.save.party or {}
   for _, mon in ipairs(party) do
-    if (mon.hp or 0) > 0 then return mon end
+    if (mon.hp or 0) > 0 and canLearnHM(game, mon, moveId) then
+      return mon
+    end
   end
-  return party[1]
+  return nil
 end
 
 local function contextualEnabled(mod)
@@ -133,6 +171,10 @@ local function tryStrength(game, ow)
     return true
   end
 
+  if not getEligibleMon(game, "STRENGTH") then
+    return false
+  end
+
   local function pushNow()
     if not (ow.map and ow.player) then return end
     ow.strengthActive = true
@@ -160,6 +202,8 @@ local function tryCut(game, ow)
     return true
   end
 
+  if not getEligibleMon(game, "CUT") then return false end
+
   local fx, fy = ow.player:facingCell()
   ow:tryCut(fx, fy)
   return true
@@ -175,6 +219,8 @@ local function tryWhirlpool(game, ow)
     return true
   end
 
+  if not getEligibleMon(game, "WHIRLPOOL") then return false end
+
   local fx, fy = ow.player:facingCell()
   ow:tryWhirlpool(fx, fy)
   return true
@@ -189,6 +235,8 @@ local function tryWaterfall(game, ow)
     pushText(game, badgeRequired(game))
     return true
   end
+
+  if not getEligibleMon(game, "WATERFALL") then return false end
 
   ow:tryWaterfall()
   return true
@@ -218,6 +266,8 @@ local function trySurf(game, ow)
     end
     return false
   end
+
+  if not getEligibleMon(game, "SURF") then return false end
 
   if reason == "ok" then
     local fx, fy = ow.player:facingCell()
@@ -285,6 +335,7 @@ local function cutFromMenu(game, reopen)
   local ow = game.overworld
   if not (ow and ow.map and ow.player) then fieldUnavailable(game, "CUT", reopen); return end
   if not hasBadge(game, "CUT") then pushText(game, badgeRequired(game), reopen); return end
+  if not getEligibleMon(game, "CUT") then pushText(game, "No Pokémon can\nuse CUT.", reopen); return end
 
   local reason = ow:useCutFieldMove()
   if reason == "ok" then
@@ -299,6 +350,7 @@ local function surfFromMenu(game, reopen)
   local ow = game.overworld
   if not (ow and ow.map and ow.player) then fieldUnavailable(game, "SURF", reopen); return end
   if not hasBadge(game, "SURF") then pushText(game, badgeRequired(game), reopen); return end
+  if not getEligibleMon(game, "SURF") then pushText(game, "No Pokémon can\nuse SURF.", reopen); return end
 
   local reason = ow:useSurfFieldMove()
   if reason == "ok" then
@@ -317,6 +369,7 @@ local function strengthFromMenu(game, reopen)
   local ow = game.overworld
   if not (ow and ow.map and ow.player) then fieldUnavailable(game, "STR", reopen); return end
   if not hasBadge(game, "STRENGTH") then pushText(game, badgeRequired(game), reopen); return end
+  if not getEligibleMon(game, "STRENGTH") then pushText(game, "No Pokémon can\nuse STRENGTH.", reopen); return end
 
   if ow.strengthActive then
     pushText(game, "STRENGTH is already\nbeing used.", reopen)
@@ -331,6 +384,7 @@ local function flashFromMenu(game, reopen)
   local ow = game.overworld
   if not (ow and ow.map and ow.player) then fieldUnavailable(game, "FLASH", reopen); return end
   if not hasBadge(game, "FLASH") then pushText(game, badgeRequired(game), reopen); return end
+  if not getEligibleMon(game, "FLASH") then pushText(game, "No Pokémon can\nuse FLASH.", reopen); return end
   if not ow.dark then
     pushText(game, "It is already\nbright here.", reopen)
     return
@@ -349,6 +403,7 @@ local function flyFromMenu(game, mod, reopen)
   local ow = game.overworld
   if not (ow and ow.map and ow.player) then fieldUnavailable(game, "FLY", reopen); return end
   if not hasBadge(game, "FLY") then pushText(game, badgeRequired(game), reopen); return end
+  if not getEligibleMon(game, "FLY") then pushText(game, "No Pokémon can\nuse FLY.", reopen); return end
   if not isOutside(game, ow) then
     pushText(game, "FLY can't be used\nhere.", reopen)
     return
@@ -367,6 +422,7 @@ local function whirlpoolFromMenu(game, reopen)
   local ow = game.overworld
   if not (ow and ow.map and ow.player) then fieldUnavailable(game, "WHRL", reopen); return end
   if not hasBadge(game, "WHIRLPOOL") then pushText(game, badgeRequired(game), reopen); return end
+  if not getEligibleMon(game, "WHIRLPOOL") then pushText(game, "No Pokémon can\nuse WHIRLPOOL.", reopen); return end
   
   if ow.useWhirlpoolFieldMove and ow:useWhirlpoolFieldMove() == "ok" then
     local fx, fy = ow.player:facingCell()
@@ -380,6 +436,7 @@ local function waterfallFromMenu(game, reopen)
   local ow = game.overworld
   if not (ow and ow.map and ow.player) then fieldUnavailable(game, "WTFL", reopen); return end
   if not hasBadge(game, "WATERFALL") then pushText(game, badgeRequired(game), reopen); return end
+  if not getEligibleMon(game, "WATERFALL") then pushText(game, "No Pokémon can\nuse WATERFALL.", reopen); return end
 
   if ow.useWaterfallFieldMove and ow:useWaterfallFieldMove() == "ok" then
     ow:tryWaterfall()
@@ -486,10 +543,11 @@ return function(mod)
       return contextualInteract(game, mod, dispatch.baseInteract, ow, ...)
     end
 
-    -- Strictly enforce item ownership AND badge requirements
+    -- Require Item Ownership + Badge + Party Species Compatibility
     dispatch.partyKnows = function(_, moveId)
       if FIELD_HMS[moveId] and ownedHM(game, moveId) and hasBadge(game, moveId) then
-        return fieldHelper(game)
+        local mon = getEligibleMon(game, moveId)
+        if mon then return mon end
       end
       return nil
     end

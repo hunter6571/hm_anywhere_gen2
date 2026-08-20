@@ -1,11 +1,11 @@
 # HM Anywhere (Gen2Recomp Port)
 
-Use owned HMs without needing to teach them to Pokémon in your party! Supports Cut, Fly, Surf, Strength, Flash, Whirlpool, and Waterfall.
+Use owned HMs without needing to teach them to Pokémon in your party! Supports Cut, Fly, Surf, Strength, Flash, Whirlpool, Waterfall, and Rock Smash (TM08)!
 
 ## Features
 - **Bag Usage:** Owning an HM device in your Bag allows field usage.
 - **Start Menu:** Access all owned HMs directly via `Start -> HM`.
-- **Contextual A-Button:** Press A in front of Cut trees, boulders, water, whirlpools, or waterfalls to trigger them automatically.
+- **Contextual A-Button:** Press A in front of Cut trees, boulders, water, whirlpools, waterfalls, or smashable rocks to trigger them automatically.
 - **Toggleable:** Turn contextual actions ON/OFF inside the `Start -> HM` menu.
 
 ## Installation

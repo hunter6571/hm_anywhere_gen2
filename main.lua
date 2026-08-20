@@ -1,4 +1,4 @@
--- HM Anywhere v1.2.3 (Ported for Gen2Recomp)
+-- HM Anywhere v1.2.4 (Ported for Gen2Recomp)
 --
 -- Owning an HM item in your Bag allows field usage, provided a party member can learn it.
 
@@ -12,6 +12,7 @@ local HM_BADGES = {
   FLASH      = "ZEPHYRBADGE",
   WHIRLPOOL  = "GLACIERBADGE",
   WATERFALL  = "RISINGBADGE",
+  ROCK_SMASH = "ZEPHYRBADGE",
 }
 
 local FIELD_HMS = {
@@ -22,6 +23,7 @@ local FIELD_HMS = {
   FLASH      = true,
   WHIRLPOOL  = true,
   WATERFALL  = true,
+  ROCK_SMASH = true,
 }
 
 local HM_TO_MACHINE = {
@@ -32,9 +34,10 @@ local HM_TO_MACHINE = {
   FLASH      = { "HM05" },
   WHIRLPOOL  = { "HM06" },
   WATERFALL  = { "HM07" },
+  ROCK_SMASH = { "TM08" },
 }
 
-local HM_ORDER = { "CUT", "FLY", "SURF", "STRENGTH", "FLASH", "WHIRLPOOL", "WATERFALL" }
+local HM_ORDER = { "CUT", "FLY", "SURF", "STRENGTH", "FLASH", "WHIRLPOOL", "WATERFALL", "ROCK_SMASH" }
 
 local HM_LABEL = {
   CUT        = "CUT",
@@ -44,6 +47,7 @@ local HM_LABEL = {
   FLASH      = "FLSH",
   WHIRLPOOL  = "WHRL",
   WATERFALL  = "WTFL",
+  ROCK_SMASH = "ROCK",
 }
 
 -- Comprehensive Gen II Learner Fallback Maps (Supports both IDs and Names)
@@ -491,6 +495,129 @@ local HARDCODED_HM_LEARNERS = {
     230, "KINGDRA",
     245, "SUICUNE",
     249, "LUGIA"
+  },
+  ROCK_SMASH = {
+    4, "CHARMANDER",
+    5, "CHARMELEON",
+    6, "CHARIZARD",
+    7, "SQUIRTLE",
+    8, "WARTORTLE",
+    9, "BLASTOISE",
+    19, "RATTATA",
+    20, "RATICATE",
+    27, "SANDSHREW",
+    28, "SANDSLASH",
+    30, "NIDORINA",
+    31, "NIDOQUEEN",
+    33, "NIDORINO",
+    34, "NIDOKING",
+    46, "PARAS",
+    47, "PARASECT",
+    50, "DIGLETT",
+    51, "DUGTRIO",
+    54, "PSYDUCK",
+    55, "GOLDUCK",
+    56, "MANKEY",
+    57, "PRIMEAPE",
+    58, "GROWLITHE",
+    59, "ARCANINE",
+    61, "POLIWHIRL",
+    62, "POLIWRATH",
+    66, "MACHOP",
+    67, "MACHOKE",
+    68, "MACHAMP",
+    74, "GEODUDE",
+    75, "GRAVELER",
+    76, "GOLEM",
+    79, "SLOWPOKE",
+    80, "SLOWBRO",
+    94, "GENGAR",
+    95, "ONIX",
+    98, "KRABBY",
+    99, "KINGLER",
+    104, "CUBONE",
+    105, "MAROWAK",
+    106, "HITMONLEE",
+    107, "HITMONCHAN",
+    108, "LICKITUNG",
+    111, "RHYHORN",
+    112, "RHYDON",
+    113, "CHANSEY",
+    115, "KANGASKHAN",
+    123, "SCYTHER",
+    125, "ELECTABUZZ",
+    126, "MAGMAR",
+    127, "PINSIR",
+    128, "TAUROS",
+    130, "GYARADOS",
+    131, "LAPRAS",
+    138, "OMANYTE",
+    139, "OMASTAR",
+    140, "KABUTO",
+    141, "KABUTOPS",
+    142, "AERODACTYL",
+    143, "SNORLAX",
+    144, "ARTICUNO",
+    145, "ZAPDOS",
+    146, "MOLTRES",
+    149, "DRAGONITE",
+    150, "MEWTWO",
+    151, "MEW",
+    152, "CHIKORITA",
+    153, "BAYLEEF",
+    154, "MEGANIUM",
+    155, "CYNDAQUIL",
+    156, "QUILAVA",
+    157, "TYPHLOSION",
+    158, "TOTODILE",
+    159, "CROCONAW",
+    160, "FERALIGATR",
+    175, "TOGEPI",
+    176, "TOGETIC",
+    179, "MAREEP",
+    180, "FLAAFFY",
+    181, "AMPHAROS",
+    183, "MARILL",
+    184, "AZUMARILL",
+    185, "SUDOWOODO",
+    186, "POLITOED",
+    190, "AIPOM",
+    194, "WOOPER",
+    195, "QUAGSIRE",
+    199, "SLOWKING",
+    203, "GIRAFARIG",
+    204, "PINECO",
+    205, "FORRETRESS",
+    206, "DUNSPARCE",
+    207, "GLIGAR",
+    208, "STEELIX",
+    209, "SNUBBULL",
+    210, "GRANBULL",
+    212, "SCIZOR",
+    213, "SHUCKLE",
+    214, "HERACROSS",
+    215, "SNEASEL",
+    216, "TEDDIURSA",
+    217, "URSARING",
+    218, "SLUGMA",
+    219, "MAGCARGO",
+    220, "SWINUB",
+    221, "PILOSWINE",
+    222, "CORSOLA",
+    228, "HOUNDOUR",
+    229, "HOUNDOOM",
+    231, "PHANPY",
+    232, "DONPHAN",
+    236, "TYROGUE",
+    237, "HITMONTOP",
+    241, "MILTANK",
+    242, "BLISSEY",
+    243, "RAIKOU",
+    244, "ENTEI",
+    245, "SUICUNE",
+    248, "TYRANITAR",
+    249, "LUGIA",
+    250, "HO_OH"
   }
 }
 
@@ -685,6 +812,23 @@ end
 -- Contextual A-button actions
 -- -------------------------------------------------------------------------
 
+local function tryRockSmash(game, ow)
+  if not ownedHM(game, "ROCK_SMASH") or not ow.useRockSmashFieldMove then return false end
+  local reason = ow:useRockSmashFieldMove()
+  if reason ~= "ok" then return false end
+
+  if not hasBadge(game, "ROCK_SMASH") then
+    pushText(game, badgeRequired(game))
+    return true
+  end
+
+  if not getEligibleMon(game, "ROCK_SMASH") then return false end
+
+  local fx, fy = ow.player:facingCell()
+  ow:tryRockSmash(fx, fy)
+  return true
+end
+
 local function tryStrength(game, ow)
   if not ownedHM(game, "STRENGTH") then return false end
   local Map = require("src.world.Map")
@@ -829,6 +973,7 @@ local function contextualInteract(game, mod, baseInteract, ow, ...)
   end
 
   if tryCut(game, ow) then return end
+  if tryRockSmash(game, ow) then return end
   if tryWhirlpool(game, ow) then return end
   if tryWaterfall(game, ow) then return end
   if trySurf(game, ow) then return end
@@ -854,6 +999,20 @@ local function removeVanillaHMRows(items)
     if not FIELD_HMS[label] then out[#out + 1] = item end
   end
   return out
+end
+
+local function rockSmashFromMenu(game, reopen)
+  local ow = game.overworld
+  if not (ow and ow.map and ow.player) then fieldUnavailable(game, "ROCK", reopen); return end
+  if not hasBadge(game, "ROCK_SMASH") then pushText(game, badgeRequired(game), reopen); return end
+  if not getEligibleMon(game, "ROCK_SMASH") then pushText(game, "No Pokémon can\nuse ROCK SMASH.", reopen); return end
+
+  if ow.useRockSmashFieldMove and ow:useRockSmashFieldMove() == "ok" then
+    local fx, fy = ow.player:facingCell()
+    ow:tryRockSmash(fx, fy)
+  else
+    pushText(game, "It's a smashable\nrock.", reopen)
+  end
 end
 
 local function cutFromMenu(game, reopen)
@@ -997,6 +1156,8 @@ local function openHMMenu(game, mod)
         items[#items + 1] = { label = label, onSelect = function() whirlpoolFromMenu(game, reopen) end }
       elseif moveId == "WATERFALL" then
         items[#items + 1] = { label = label, onSelect = function() waterfallFromMenu(game, reopen) end }
+      elseif moveId == "ROCK_SMASH" then
+        items[#items + 1] = { label = label, onSelect = function() rockSmashFromMenu(game, reopen) end }
       end
     end
   end

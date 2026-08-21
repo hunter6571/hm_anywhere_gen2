@@ -1,4 +1,4 @@
--- HM Anywhere v1.2.4 (Ported for Gen2Recomp)
+-- HM Anywhere v1.2.5 (Ported for Gen2Recomp)
 --
 -- Owning an HM item in your Bag allows field usage, provided a party member can learn it.
 
@@ -53,571 +53,113 @@ local HM_LABEL = {
 -- Comprehensive Gen II Learner Fallback Maps (Supports both IDs and Names)
 local HARDCODED_HM_LEARNERS = {
   CUT = {
-    1, "BULBASAUR",
-    2, "IVYSAUR",
-    3, "VENUSAUR",
-    4, "CHARMANDER",
-    5, "CHARMELEON",
-    6, "CHARIZARD",
-    15, "BEEDRILL",
-    20, "RATICATE",
-    27, "SANDSHREW",
-    28, "SANDSLASH",
-    30, "NIDORINA",
-    31, "NIDOQUEEN",
-    33, "NIDORINO",
-    34, "NIDOKING",
-    43, "ODDISH",
-    44, "GLOOM",
-    45, "VILEPLUME",
-    46, "PARAS",
-    47, "PARASECT",
-    50, "DIGLETT",
-    51, "DUGTRIO",
-    69, "BELLSPROUT",
-    70, "WEEPINBELL",
-    71, "VICTREEBEL",
-    72, "TENTACOOL",
-    73, "TENTACRUEL",
-    83, "FARFETCHD",
-    98, "KRABBY",
-    99, "KINGLER",
-    108, "LICKITUNG",
-    112, "RHYDON",
-    114, "TANGELA",
-    123, "SCYTHER",
-    127, "PINSIR",
-    141, "KABUTOPS",
-    151, "MEW",
-    152, "CHIKORITA",
-    153, "BAYLEEF",
-    154, "MEGANIUM",
-    156, "QUILAVA",
-    157, "TYPHLOSION",
-    158, "TOTODILE",
-    159, "CROCONAW",
-    160, "FERALIGATR",
-    161, "SENTRET",
-    162, "FURRET",
-    182, "BELLOSSOM",
-    190, "AIPOM",
-    192, "SUNFLORA",
-    196, "ESPEON",
-    197, "UMBREON",
-    207, "GLIGAR",
-    208, "STEELIX",
-    212, "SCIZOR",
-    214, "HERACROSS",
-    215, "SNEASEL",
-    216, "TEDDIURSA",
-    217, "URSARING",
-    227, "SKARMORY",
-    248, "TYRANITAR",
-    251, "CELEBI"
+    1, "BULBASAUR", 2, "IVYSAUR", 3, "VENUSAUR", 4, "CHARMANDER", 5, "CHARMELEON", 6, "CHARIZARD",
+    15, "BEEDRILL", 20, "RATICATE", 27, "SANDSHREW", 28, "SANDSLASH", 30, "NIDORINA", 31, "NIDOQUEEN",
+    33, "NIDORINO", 34, "NIDOKING", 43, "ODDISH", 44, "GLOOM", 45, "VILEPLUME", 46, "PARAS",
+    47, "PARASECT", 50, "DIGLETT", 51, "DUGTRIO", 69, "BELLSPROUT", 70, "WEEPINBELL", 71, "VICTREEBEL",
+    72, "TENTACOOL", 73, "TENTACRUEL", 83, "FARFETCHD", 98, "KRABBY", 99, "KINGLER", 108, "LICKITUNG",
+    112, "RHYDON", 114, "TANGELA", 123, "SCYTHER", 127, "PINSIR", 141, "KABUTOPS", 151, "MEW",
+    152, "CHIKORITA", 153, "BAYLEEF", 154, "MEGANIUM", 156, "QUILAVA", 157, "TYPHLOSION", 158, "TOTODILE",
+    159, "CROCONAW", 160, "FERALIGATR", 161, "SENTRET", 162, "FURRET", 182, "BELLOSSOM", 190, "AIPOM",
+    192, "SUNFLORA", 196, "ESPEON", 197, "UMBREON", 207, "GLIGAR", 208, "STEELIX", 212, "SCIZOR",
+    214, "HERACROSS", 215, "SNEASEL", 216, "TEDDIURSA", 217, "URSARING", 227, "SKARMORY", 248, "TYRANITAR", 251, "CELEBI"
   },
   FLY = {
-    6, "CHARIZARD",
-    16, "PIDGEY",
-    17, "PIDGEOTTO",
-    18, "PIDGEOT",
-    21, "SPEAROW",
-    22, "FEAROW",
-    83, "FARFETCHD",
-    84, "DODUO",
-    85, "DODRIO",
-    142, "AERODACTYL",
-    144, "ARTICUNO",
-    145, "ZAPDOS",
-    146, "MOLTRES",
-    149, "DRAGONITE",
-    151, "MEW",
-    163, "HOOTHOOT",
-    164, "NOCTOWL",
-    169, "CROBAT",
-    176, "TOGETIC",
-    177, "NATU",
-    178, "XATU",
-    198, "MURKROW",
-    225, "DELIBIRD",
-    227, "SKARMORY",
-    249, "LUGIA",
-    250, "HO_OH"
+    6, "CHARIZARD", 16, "PIDGEY", 17, "PIDGEOTTO", 18, "PIDGEOT", 21, "SPEAROW", 22, "FEAROW",
+    83, "FARFETCHD", 84, "DODUO", 85, "DODRIO", 142, "AERODACTYL", 144, "ARTICUNO", 145, "ZAPDOS",
+    146, "MOLTRES", 149, "DRAGONITE", 151, "MEW", 163, "HOOTHOOT", 164, "NOCTOWL", 169, "CROBAT",
+    176, "TOGETIC", 177, "NATU", 178, "XATU", 198, "MURKROW", 225, "DELIBIRD", 227, "SKARMORY",
+    249, "LUGIA", 250, "HO_OH"
   },
   SURF = {
-    7, "SQUIRTLE",
-    8, "WARTORTLE",
-    9, "BLASTOISE",
-    31, "NIDOQUEEN",
-    34, "NIDOKING",
-    54, "PSYDUCK",
-    55, "GOLDUCK",
-    60, "POLIWAG",
-    61, "POLIWHIRL",
-    62, "POLIWRATH",
-    72, "TENTACOOL",
-    73, "TENTACRUEL",
-    79, "SLOWPOKE",
-    80, "SLOWBRO",
-    86, "SEEL",
-    87, "DEWGONG",
-    90, "SHELLDER",
-    91, "CLOYSTER",
-    98, "KRABBY",
-    99, "KINGLER",
-    108, "LICKITUNG",
-    112, "RHYDON",
-    115, "KANGASKHAN",
-    116, "HORSEA",
-    117, "SEADRA",
-    118, "GOLDEEN",
-    119, "SEAKING",
-    120, "STARYU",
-    121, "STARMIE",
-    128, "TAUROS",
-    130, "GYARADOS",
-    131, "LAPRAS",
-    134, "VAPOREON",
-    138, "OMANYTE",
-    139, "OMASTAR",
-    141, "KABUTOPS",
-    143, "SNORLAX",
-    147, "DRATINI",
-    148, "DRAGONAIR",
-    149, "DRAGONITE",
-    151, "MEW",
-    158, "TOTODILE",
-    159, "CROCONAW",
-    160, "FERALIGATR",
-    162, "FURRET",
-    170, "CHINCHOU",
-    171, "LANTURN",
-    183, "MARILL",
-    184, "AZUMARILL",
-    186, "POLITOED",
-    194, "WOOPER",
-    195, "QUAGSIRE",
-    199, "SLOWKING",
-    211, "QWILFISH",
-    215, "SNEASEL",
-    222, "CORSOLA",
-    223, "REMORAID",
-    224, "OCTILLERY",
-    226, "MANTINE",
-    230, "KINGDRA",
-    241, "MILTANK",
-    245, "SUICUNE",
-    248, "TYRANITAR",
-    249, "LUGIA"
+    7, "SQUIRTLE", 8, "WARTORTLE", 9, "BLASTOISE", 31, "NIDOQUEEN", 34, "NIDOKING", 54, "PSYDUCK",
+    55, "GOLDUCK", 60, "POLIWAG", 61, "POLIWHIRL", 62, "POLIWRATH", 72, "TENTACOOL", 73, "TENTACRUEL",
+    79, "SLOWPOKE", 80, "SLOWBRO", 86, "SEEL", 87, "DEWGONG", 90, "SHELLDER", 91, "CLOYSTER",
+    98, "KRABBY", 99, "KINGLER", 108, "LICKITUNG", 112, "RHYDON", 115, "KANGASKHAN", 116, "HORSEA",
+    117, "SEADRA", 118, "GOLDEEN", 119, "SEAKING", 120, "STARYU", 121, "STARMIE", 128, "TAUROS",
+    130, "GYARADOS", 131, "LAPRAS", 134, "VAPOREON", 138, "OMANYTE", 139, "OMASTAR", 141, "KABUTOPS",
+    143, "SNORLAX", 147, "DRATINI", 148, "DRAGONAIR", 149, "DRAGONITE", 151, "MEW", 158, "TOTODILE",
+    159, "CROCONAW", 160, "FERALIGATR", 162, "FURRET", 170, "CHINCHOU", 171, "LANTURN", 183, "MARILL",
+    184, "AZUMARILL", 186, "POLITOED", 194, "WOOPER", 195, "QUAGSIRE", 199, "SLOWKING", 211, "QWILFISH",
+    215, "SNEASEL", 222, "CORSOLA", 223, "REMORAID", 224, "OCTILLERY", 226, "MANTINE", 230, "KINGDRA",
+    241, "MILTANK", 245, "SUICUNE", 248, "TYRANITAR", 249, "LUGIA"
   },
   STRENGTH = {
-    6, "CHARIZARD",
-    7, "SQUIRTLE",
-    8, "WARTORTLE",
-    9, "BLASTOISE",
-    20, "RATICATE",
-    23, "EKANS",
-    24, "ARBOK",
-    25, "PIKACHU",
-    26, "RAICHU",
-    27, "SANDSHREW",
-    28, "SANDSLASH",
-    31, "NIDOQUEEN",
-    34, "NIDOKING",
-    35, "CLEFAIRY",
-    36, "CLEFABLE",
-    39, "JIGGLYPUFF",
-    40, "WIGGLYTUFF",
-    54, "PSYDUCK",
-    55, "GOLDUCK",
-    56, "MANKEY",
-    57, "PRIMEAPE",
-    61, "POLIWHIRL",
-    62, "POLIWRATH",
-    66, "MACHOP",
-    67, "MACHOKE",
-    68, "MACHAMP",
-    74, "GEODUDE",
-    75, "GRAVELER",
-    76, "GOLEM",
-    79, "SLOWPOKE",
-    80, "SLOWBRO",
-    86, "SEEL",
-    87, "DEWGONG",
-    94, "GENGAR",
-    95, "ONIX",
-    98, "KRABBY",
-    99, "KINGLER",
-    103, "EXEGGUTOR",
-    104, "CUBONE",
-    105, "MAROWAK",
-    106, "HITMONLEE",
-    107, "HITMONCHAN",
-    108, "LICKITUNG",
-    111, "RHYHORN",
-    112, "RHYDON",
-    113, "CHANSEY",
-    115, "KANGASKHAN",
-    125, "ELECTABUZZ",
-    127, "PINSIR",
-    128, "TAUROS",
-    130, "GYARADOS",
-    131, "LAPRAS",
-    139, "OMASTAR",
-    143, "SNORLAX",
-    149, "DRAGONITE",
-    150, "MEWTWO",
-    151, "MEW",
-    153, "BAYLEEF",
-    154, "MEGANIUM",
-    157, "TYPHLOSION",
-    160, "FERALIGATR",
-    162, "FURRET",
-    180, "FLAAFFY",
-    181, "AMPHAROS",
-    184, "AZUMARILL",
-    185, "SUDOWOODO",
-    186, "POLITOED",
-    190, "AIPOM",
-    195, "QUAGSIRE",
-    199, "SLOWKING",
-    205, "FORRETRESS",
-    206, "DUNSPARCE",
-    207, "GLIGAR",
-    208, "STEELIX",
-    210, "GRANBULL",
-    212, "SCIZOR",
-    213, "SHUCKLE",
-    214, "HERACROSS",
-    215, "SNEASEL",
-    216, "TEDDIURSA",
-    217, "URSARING",
-    219, "MAGCARGO",
-    220, "SWINUB",
-    221, "PILOSWINE",
-    222, "CORSOLA",
-    229, "HOUNDOOM",
-    231, "PHANPY",
-    232, "DONPHAN",
-    237, "HITMONTOP",
-    241, "MILTANK",
-    242, "BLISSEY",
-    243, "RAIKOU",
-    244, "ENTEI",
-    245, "SUICUNE",
-    248, "TYRANITAR",
-    249, "LUGIA",
-    250, "HO_OH"
+    6, "CHARIZARD", 7, "SQUIRTLE", 8, "WARTORTLE", 9, "BLASTOISE", 20, "RATICATE", 23, "EKANS",
+    24, "ARBOK", 25, "PIKACHU", 26, "RAICHU", 27, "SANDSHREW", 28, "SANDSLASH", 31, "NIDOQUEEN",
+    34, "NIDOKING", 35, "CLEFAIRY", 36, "CLEFABLE", 39, "JIGGLYPUFF", 40, "WIGGLYTUFF", 54, "PSYDUCK",
+    55, "GOLDUCK", 56, "MANKEY", 57, "PRIMEAPE", 61, "POLIWHIRL", 62, "POLIWRATH", 66, "MACHOP",
+    67, "MACHOKE", 68, "MACHAMP", 74, "GEODUDE", 75, "GRAVELER", 76, "GOLEM", 79, "SLOWPOKE",
+    80, "SLOWBRO", 86, "SEEL", 87, "DEWGONG", 94, "GENGAR", 95, "ONIX", 98, "KRABBY", 99, "KINGLER",
+    103, "EXEGGUTOR", 104, "CUBONE", 105, "MAROWAK", 106, "HITMONLEE", 107, "HITMONCHAN", 108, "LICKITUNG",
+    111, "RHYHORN", 112, "RHYDON", 113, "CHANSEY", 115, "KANGASKHAN", 125, "ELECTABUZZ", 127, "PINSIR",
+    128, "TAUROS", 130, "GYARADOS", 131, "LAPRAS", 139, "OMASTAR", 143, "SNORLAX", 149, "DRAGONITE",
+    150, "MEWTWO", 151, "MEW", 153, "BAYLEEF", 154, "MEGANIUM", 157, "TYPHLOSION", 160, "FERALIGATR",
+    162, "FURRET", 180, "FLAAFFY", 181, "AMPHAROS", 184, "AZUMARILL", 185, "SUDOWOODO", 186, "POLITOED",
+    190, "AIPOM", 195, "QUAGSIRE", 199, "SLOWKING", 205, "FORRETRESS", 206, "DUNSPARCE", 207, "GLIGAR",
+    208, "STEELIX", 210, "GRANBULL", 212, "SCIZOR", 213, "SHUCKLE", 214, "HERACROSS", 215, "SNEASEL",
+    216, "TEDDIURSA", 217, "URSARING", 219, "MAGCARGO", 220, "SWINUB", 221, "PILOSWINE", 222, "CORSOLA",
+    229, "HOUNDOOM", 231, "PHANPY", 232, "DONPHAN", 237, "HITMONTOP", 241, "MILTANK", 242, "BLISSEY",
+    243, "RAIKOU", 244, "ENTEI", 245, "SUICUNE", 248, "TYRANITAR", 249, "LUGIA", 250, "HO_OH"
   },
   FLASH = {
-    1, "BULBASAUR",
-    2, "IVYSAUR",
-    3, "VENUSAUR",
-    12, "BUTTERFREE",
-    25, "PIKACHU",
-    26, "RAICHU",
-    35, "CLEFAIRY",
-    36, "CLEFABLE",
-    39, "JIGGLYPUFF",
-    40, "WIGGLYTUFF",
-    43, "ODDISH",
-    44, "GLOOM",
-    45, "VILEPLUME",
-    46, "PARAS",
-    47, "PARASECT",
-    49, "VENOMOTH",
-    54, "PSYDUCK",
-    55, "GOLDUCK",
-    63, "ABRA",
-    64, "KADABRA",
-    65, "ALAKAZAM",
-    69, "BELLSPROUT",
-    70, "WEEPINBELL",
-    71, "VICTREEBEL",
-    79, "SLOWPOKE",
-    80, "SLOWBRO",
-    81, "MAGNEMITE",
-    82, "MAGNETON",
-    96, "DROWZEE",
-    97, "HYPNO",
-    100, "VOLTORB",
-    101, "ELECTRODE",
-    102, "EXEGGCUTE",
-    103, "EXEGGUTOR",
-    113, "CHANSEY",
-    114, "TANGELA",
-    120, "STARYU",
-    121, "STARMIE",
-    122, "MR_MIME",
-    125, "ELECTABUZZ",
-    126, "MAGMAR",
-    135, "JOLTEON",
-    137, "PORYGON",
-    145, "ZAPDOS",
-    150, "MEWTWO",
-    151, "MEW",
-    152, "CHIKORITA",
-    153, "BAYLEEF",
-    154, "MEGANIUM",
-    155, "CYNDAQUIL",
-    156, "QUILAVA",
-    157, "TYPHLOSION",
-    161, "SENTRET",
-    163, "HOOTHOOT",
-    164, "NOCTOWL",
-    165, "LEDYBA",
-    166, "LEDIAN",
-    167, "SPINARAK",
-    168, "ARIADOS",
-    170, "CHINCHOU",
-    171, "LANTURN",
-    172, "PICHU",
-    173, "CLEFFA",
-    174, "IGGLYBUFF",
-    175, "TOGEPI",
-    176, "TOGETIC",
-    177, "NATU",
-    178, "XATU",
-    179, "MAREEP",
-    180, "FLAAFFY",
-    181, "AMPHAROS",
-    182, "BELLOSSOM",
-    187, "HOPPIP",
-    188, "SKIPLOOM",
-    189, "JUMPLUFF",
-    191, "SUNKERN",
-    192, "SUNFLORA",
-    193, "YANMA",
-    196, "ESPEON",
-    197, "UMBREON",
-    199, "SLOWKING",
-    200, "MISDREAVUS",
-    203, "GIRAFARIG",
-    204, "PINECO",
-    209, "SNUBBULL",
-    210, "GRANBULL",
-    213, "SHUCKLE",
-    233, "PORYGON2",
-    234, "STANTLER",
-    239, "ELEKID",
-    242, "BLISSEY",
-    243, "RAIKOU",
-    244, "ENTEI",
-    250, "HO_OH",
-    251, "CELEBI"
+    1, "BULBASAUR", 2, "IVYSAUR", 3, "VENUSAUR", 12, "BUTTERFREE", 25, "PIKACHU", 26, "RAICHU",
+    35, "CLEFAIRY", 36, "CLEFABLE", 39, "JIGGLYPUFF", 40, "WIGGLYTUFF", 43, "ODDISH", 44, "GLOOM",
+    45, "VILEPLUME", 46, "PARAS", 47, "PARASECT", 49, "VENOMOTH", 54, "PSYDUCK", 55, "GOLDUCK",
+    63, "ABRA", 64, "KADABRA", 65, "ALAKAZAM", 69, "BELLSPROUT", 70, "WEEPINBELL", 71, "VICTREEBEL",
+    79, "SLOWPOKE", 80, "SLOWBRO", 81, "MAGNEMITE", 82, "MAGNETON", 96, "DROWZEE", 97, "HYPNO",
+    100, "VOLTORB", 101, "ELECTRODE", 102, "EXEGGCUTE", 103, "EXEGGUTOR", 113, "CHANSEY", 114, "TANGELA",
+    120, "STARYU", 121, "STARMIE", 122, "MR_MIME", 125, "ELECTABUZZ", 126, "MAGMAR", 135, "JOLTEON",
+    137, "PORYGON", 145, "ZAPDOS", 150, "MEWTWO", 151, "MEW", 152, "CHIKORITA", 153, "BAYLEEF",
+    154, "MEGANIUM", 155, "CYNDAQUIL", 156, "QUILAVA", 157, "TYPHLOSION", 161, "SENTRET", 163, "HOOTHOOT",
+    164, "NOCTOWL", 165, "LEDYBA", 166, "LEDIAN", 167, "SPINARAK", 168, "ARIADOS", 170, "CHINCHOU",
+    171, "LANTURN", 172, "PICHU", 173, "CLEFFA", 174, "IGGLYBUFF", 175, "TOGEPI", 176, "TOGETIC",
+    177, "NATU", 178, "XATU", 179, "MAREEP", 180, "FLAAFFY", 181, "AMPHAROS", 182, "BELLOSSOM",
+    187, "HOPPIP", 188, "SKIPLOOM", 189, "JUMPLUFF", 191, "SUNKERN", 192, "SUNFLORA", 193, "YANMA",
+    196, "ESPEON", 197, "UMBREON", 199, "SLOWKING", 200, "MISDREAVUS", 203, "GIRAFARIG", 204, "PINECO",
+    209, "SNUBBULL", 210, "GRANBULL", 213, "SHUCKLE", 233, "PORYGON2", 234, "STANTLER", 239, "ELEKID",
+    242, "BLISSEY", 243, "RAIKOU", 244, "ENTEI", 250, "HO_OH", 251, "CELEBI"
   },
   WHIRLPOOL = {
-    7, "SQUIRTLE",
-    8, "WARTORTLE",
-    9, "BLASTOISE",
-    54, "PSYDUCK",
-    55, "GOLDUCK",
-    60, "POLIWAG",
-    61, "POLIWHIRL",
-    62, "POLIWRATH",
-    72, "TENTACOOL",
-    73, "TENTACRUEL",
-    86, "SEEL",
-    87, "DEWGONG",
-    90, "SHELLDER",
-    91, "CLOYSTER",
-    98, "KRABBY",
-    99, "KINGLER",
-    116, "HORSEA",
-    117, "SEADRA",
-    118, "GOLDEEN",
-    119, "SEAKING",
-    120, "STARYU",
-    121, "STARMIE",
-    130, "GYARADOS",
-    131, "LAPRAS",
-    134, "VAPOREON",
-    138, "OMANYTE",
-    139, "OMASTAR",
-    141, "KABUTOPS",
-    147, "DRATINI",
-    148, "DRAGONAIR",
-    149, "DRAGONITE",
-    151, "MEW",
-    159, "CROCONAW",
-    160, "FERALIGATR",
-    170, "CHINCHOU",
-    171, "LANTURN",
-    183, "MARILL",
-    184, "AZUMARILL",
-    186, "POLITOED",
-    194, "WOOPER",
-    195, "QUAGSIRE",
-    199, "SLOWKING",
-    211, "QWILFISH",
-    222, "CORSOLA",
-    223, "REMORAID",
-    224, "OCTILLERY",
-    226, "MANTINE",
-    230, "KINGDRA",
-    245, "SUICUNE",
-    249, "LUGIA"
+    7, "SQUIRTLE", 8, "WARTORTLE", 9, "BLASTOISE", 54, "PSYDUCK", 55, "GOLDUCK", 60, "POLIWAG",
+    61, "POLIWHIRL", 62, "POLIWRATH", 72, "TENTACOOL", 73, "TENTACRUEL", 86, "SEEL", 87, "DEWGONG",
+    90, "SHELLDER", 91, "CLOYSTER", 98, "KRABBY", 99, "KINGLER", 116, "HORSEA", 117, "SEADRA",
+    118, "GOLDEEN", 119, "SEAKING", 120, "STARYU", 121, "STARMIE", 130, "GYARADOS", 131, "LAPRAS",
+    134, "VAPOREON", 138, "OMANYTE", 139, "OMASTAR", 141, "KABUTOPS", 147, "DRATINI", 148, "DRAGONAIR",
+    149, "DRAGONITE", 151, "MEW", 159, "CROCONAW", 160, "FERALIGATR", 170, "CHINCHOU", 171, "LANTURN",
+    183, "MARILL", 184, "AZUMARILL", 186, "POLITOED", 194, "WOOPER", 195, "QUAGSIRE", 199, "SLOWKING",
+    211, "QWILFISH", 222, "CORSOLA", 223, "REMORAID", 224, "OCTILLERY", 226, "MANTINE", 230, "KINGDRA",
+    245, "SUICUNE", 249, "LUGIA"
   },
   WATERFALL = {
-    7, "SQUIRTLE",
-    8, "WARTORTLE",
-    9, "BLASTOISE",
-    54, "PSYDUCK",
-    55, "GOLDUCK",
-    60, "POLIWAG",
-    61, "POLIWHIRL",
-    62, "POLIWRATH",
-    72, "TENTACOOL",
-    73, "TENTACRUEL",
-    86, "SEEL",
-    87, "DEWGONG",
-    116, "HORSEA",
-    117, "SEADRA",
-    118, "GOLDEEN",
-    119, "SEAKING",
-    120, "STARYU",
-    121, "STARMIE",
-    130, "GYARADOS",
-    131, "LAPRAS",
-    134, "VAPOREON",
-    147, "DRATINI",
-    148, "DRAGONAIR",
-    149, "DRAGONITE",
-    151, "MEW",
-    170, "CHINCHOU",
-    171, "LANTURN",
-    183, "MARILL",
-    184, "AZUMARILL",
-    186, "POLITOED",
-    194, "WOOPER",
-    195, "QUAGSIRE",
-    211, "QWILFISH",
-    226, "MANTINE",
-    230, "KINGDRA",
-    245, "SUICUNE",
-    249, "LUGIA"
+    7, "SQUIRTLE", 8, "WARTORTLE", 9, "BLASTOISE", 54, "PSYDUCK", 55, "GOLDUCK", 60, "POLIWAG",
+    61, "POLIWHIRL", 62, "POLIWRATH", 72, "TENTACOOL", 73, "TENTACRUEL", 86, "SEEL", 87, "DEWGONG",
+    116, "HORSEA", 117, "SEADRA", 118, "GOLDEEN", 119, "SEAKING", 120, "STARYU", 121, "STARMIE",
+    130, "GYARADOS", 131, "LAPRAS", 134, "VAPOREON", 147, "DRATINI", 148, "DRAGONAIR", 149, "DRAGONITE",
+    151, "MEW", 170, "CHINCHOU", 171, "LANTURN", 183, "MARILL", 184, "AZUMARILL", 186, "POLITOED",
+    194, "WOOPER", 195, "QUAGSIRE", 211, "QWILFISH", 226, "MANTINE", 230, "KINGDRA", 245, "SUICUNE", 249, "LUGIA"
   },
   ROCK_SMASH = {
-    4, "CHARMANDER",
-    5, "CHARMELEON",
-    6, "CHARIZARD",
-    7, "SQUIRTLE",
-    8, "WARTORTLE",
-    9, "BLASTOISE",
-    19, "RATTATA",
-    20, "RATICATE",
-    27, "SANDSHREW",
-    28, "SANDSLASH",
-    30, "NIDORINA",
-    31, "NIDOQUEEN",
-    33, "NIDORINO",
-    34, "NIDOKING",
-    46, "PARAS",
-    47, "PARASECT",
-    50, "DIGLETT",
-    51, "DUGTRIO",
-    54, "PSYDUCK",
-    55, "GOLDUCK",
-    56, "MANKEY",
-    57, "PRIMEAPE",
-    58, "GROWLITHE",
-    59, "ARCANINE",
-    61, "POLIWHIRL",
-    62, "POLIWRATH",
-    66, "MACHOP",
-    67, "MACHOKE",
-    68, "MACHAMP",
-    74, "GEODUDE",
-    75, "GRAVELER",
-    76, "GOLEM",
-    79, "SLOWPOKE",
-    80, "SLOWBRO",
-    94, "GENGAR",
-    95, "ONIX",
-    98, "KRABBY",
-    99, "KINGLER",
-    104, "CUBONE",
-    105, "MAROWAK",
-    106, "HITMONLEE",
-    107, "HITMONCHAN",
-    108, "LICKITUNG",
-    111, "RHYHORN",
-    112, "RHYDON",
-    113, "CHANSEY",
-    115, "KANGASKHAN",
-    123, "SCYTHER",
-    125, "ELECTABUZZ",
-    126, "MAGMAR",
-    127, "PINSIR",
-    128, "TAUROS",
-    130, "GYARADOS",
-    131, "LAPRAS",
-    138, "OMANYTE",
-    139, "OMASTAR",
-    140, "KABUTO",
-    141, "KABUTOPS",
-    142, "AERODACTYL",
-    143, "SNORLAX",
-    144, "ARTICUNO",
-    145, "ZAPDOS",
-    146, "MOLTRES",
-    149, "DRAGONITE",
-    150, "MEWTWO",
-    151, "MEW",
-    152, "CHIKORITA",
-    153, "BAYLEEF",
-    154, "MEGANIUM",
-    155, "CYNDAQUIL",
-    156, "QUILAVA",
-    157, "TYPHLOSION",
-    158, "TOTODILE",
-    159, "CROCONAW",
-    160, "FERALIGATR",
-    175, "TOGEPI",
-    176, "TOGETIC",
-    179, "MAREEP",
-    180, "FLAAFFY",
-    181, "AMPHAROS",
-    183, "MARILL",
-    184, "AZUMARILL",
-    185, "SUDOWOODO",
-    186, "POLITOED",
-    190, "AIPOM",
-    194, "WOOPER",
-    195, "QUAGSIRE",
-    199, "SLOWKING",
-    203, "GIRAFARIG",
-    204, "PINECO",
-    205, "FORRETRESS",
-    206, "DUNSPARCE",
-    207, "GLIGAR",
-    208, "STEELIX",
-    209, "SNUBBULL",
-    210, "GRANBULL",
-    212, "SCIZOR",
-    213, "SHUCKLE",
-    214, "HERACROSS",
-    215, "SNEASEL",
-    216, "TEDDIURSA",
-    217, "URSARING",
-    218, "SLUGMA",
-    219, "MAGCARGO",
-    220, "SWINUB",
-    221, "PILOSWINE",
-    222, "CORSOLA",
-    228, "HOUNDOUR",
-    229, "HOUNDOOM",
-    231, "PHANPY",
-    232, "DONPHAN",
-    236, "TYROGUE",
-    237, "HITMONTOP",
-    241, "MILTANK",
-    242, "BLISSEY",
-    243, "RAIKOU",
-    244, "ENTEI",
-    245, "SUICUNE",
-    248, "TYRANITAR",
-    249, "LUGIA",
-    250, "HO_OH"
+    4, "CHARMANDER", 5, "CHARMELEON", 6, "CHARIZARD", 7, "SQUIRTLE", 8, "WARTORTLE", 9, "BLASTOISE",
+    19, "RATTATA", 20, "RATICATE", 27, "SANDSHREW", 28, "SANDSLASH", 30, "NIDORINA", 31, "NIDOQUEEN",
+    33, "NIDORINO", 34, "NIDOKING", 46, "PARAS", 47, "PARASECT", 50, "DIGLETT", 51, "DUGTRIO",
+    54, "PSYDUCK", 55, "GOLDUCK", 56, "MANKEY", 57, "PRIMEAPE", 58, "GROWLITHE", 59, "ARCANINE",
+    61, "POLIWHIRL", 62, "POLIWRATH", 66, "MACHOP", 67, "MACHOKE", 68, "MACHAMP", 74, "GEODUDE",
+    75, "GRAVELER", 76, "GOLEM", 79, "SLOWPOKE", 80, "SLOWBRO", 94, "GENGAR", 95, "ONIX", 98, "KRABBY",
+    99, "KINGLER", 104, "CUBONE", 105, "MAROWAK", 106, "HITMONLEE", 107, "HITMONCHAN", 108, "LICKITUNG",
+    111, "RHYHORN", 112, "RHYDON", 113, "CHANSEY", 115, "KANGASKHAN", 123, "SCYTHER", 125, "ELECTABUZZ",
+    126, "MAGMAR", 127, "PINSIR", 128, "TAUROS", 130, "GYARADOS", 131, "LAPRAS", 138, "OMANYTE",
+    139, "OMASTAR", 140, "KABUTO", 141, "KABUTOPS", 142, "AERODACTYL", 143, "SNORLAX", 144, "ARTICUNO",
+    145, "ZAPDOS", 146, "MOLTRES", 149, "DRAGONITE", 150, "MEWTWO", 151, "MEW", 152, "CHIKORITA",
+    153, "BAYLEEF", 154, "MEGANIUM", 155, "CYNDAQUIL", 156, "QUILAVA", 157, "TYPHLOSION", 158, "TOTODILE",
+    159, "CROCONAW", 160, "FERALIGATR", 175, "TOGEPI", 176, "TOGETIC", 179, "MAREEP", 180, "FLAAFFY",
+    181, "AMPHAROS", 183, "MARILL", 184, "AZUMARILL", 185, "SUDOWOODO", 186, "POLITOED", 190, "AIPOM",
+    194, "WOOPER", 195, "QUAGSIRE", 199, "SLOWKING", 203, "GIRAFARIG", 204, "PINECO", 205, "FORRETRESS",
+    206, "DUNSPARCE", 207, "GLIGAR", 208, "STEELIX", 209, "SNUBBULL", 210, "GRANBULL", 212, "SCIZOR",
+    213, "SHUCKLE", 214, "HERACROSS", 215, "SNEASEL", 216, "TEDDIURSA", 217, "URSARING", 218, "SLUGMA",
+    219, "MAGCARGO", 220, "SWINUB", 221, "PILOSWINE", 222, "CORSOLA", 228, "HOUNDOUR", 229, "HOUNDOOM",
+    231, "PHANPY", 232, "DONPHAN", 236, "TYROGUE", 237, "HITMONTOP", 241, "MILTANK", 242, "BLISSEY",
+    243, "RAIKOU", 244, "ENTEI", 245, "SUICUNE", 248, "TYRANITAR", 249, "LUGIA", 250, "HO_OH"
   }
 }
 
@@ -710,7 +252,6 @@ local function canLearnHM(game, mon, moveId)
     searchMap[s] = true
     searchMap[s:lower()] = true
     
-    -- Strip common enum prefixes if present (e.g., SPECIES_BAYLEEF -> BAYLEEF)
     if s:find("^SPECIES_") then
       local clean = s:gsub("^SPECIES_", "")
       searchMap[clean] = true
@@ -743,7 +284,6 @@ local function canLearnHM(game, mon, moveId)
               return true
             end
           end
-          -- Array check if engine stores learnable moves as a list of strings
           for _, val in ipairs(tmhmTable) do
             local sVal = tostring(val):upper()
             if moveTargets[sVal] or sVal == moveId then
@@ -808,14 +348,38 @@ local function fieldUnavailable(game, moveId, reopen)
   pushText(game, moveId .. " can't be\nused right now.", reopen)
 end
 
+-- Helper to check if facing tile or NPC ahead is a whirlpool
+local function isFacingWhirlpool(ow)
+  if not (ow and ow.player and ow.facingCell) then return false end
+  local fx, fy = ow.player:facingCell()
+  
+  -- Check Map object/NPC at target location
+  local npc = ow.npcAtCell and ow:npcAtCell(fx, fy)
+  if npc and npc.def then
+    local id = tostring(npc.def.id or npc.def.name or ""):upper()
+    if id:find("WHIRLPOOL") then return true end
+  end
+
+  -- Fallback tile inspection
+  if ow.map and ow.map.getTile then
+    local tile = ow.map:getTile(fx, fy)
+    if type(tile) == "string" and tile:upper():find("WHIRLPOOL") then return true end
+  end
+
+  return false
+end
+
 -- -------------------------------------------------------------------------
 -- Contextual A-button actions
 -- -------------------------------------------------------------------------
 
 local function tryRockSmash(game, ow)
-  if not ownedHM(game, "ROCK_SMASH") or not ow.useRockSmashFieldMove then return false end
-  local reason = ow:useRockSmashFieldMove()
-  if reason ~= "ok" then return false end
+  if not ownedHM(game, "ROCK_SMASH") then return false end
+  local fn = ow.useRockSmashFieldMove or ow.useRockSmash
+  if not fn then return false end
+
+  local reason = fn(ow)
+  if reason ~= "ok" and reason ~= true then return false end
 
   if not hasBadge(game, "ROCK_SMASH") then
     pushText(game, badgeRequired(game))
@@ -825,7 +389,7 @@ local function tryRockSmash(game, ow)
   if not getEligibleMon(game, "ROCK_SMASH") then return false end
 
   local fx, fy = ow.player:facingCell()
-  ow:tryRockSmash(fx, fy)
+  if ow.tryRockSmash then ow:tryRockSmash(fx, fy) end
   return true
 end
 
@@ -863,8 +427,11 @@ end
 
 local function tryCut(game, ow)
   if not ownedHM(game, "CUT") then return false end
-  local reason = ow:useCutFieldMove()
-  if reason ~= "ok" then return false end
+  local fn = ow.useCutFieldMove or ow.useCut
+  if not fn then return false end
+
+  local reason = fn(ow)
+  if reason ~= "ok" and reason ~= true then return false end
 
   if not hasBadge(game, "CUT") then
     pushText(game, badgeRequired(game))
@@ -874,14 +441,24 @@ local function tryCut(game, ow)
   if not getEligibleMon(game, "CUT") then return false end
 
   local fx, fy = ow.player:facingCell()
-  ow:tryCut(fx, fy)
+  if ow.tryCut then ow:tryCut(fx, fy) end
   return true
 end
 
 local function tryWhirlpool(game, ow)
-  if not ownedHM(game, "WHIRLPOOL") or not ow.useWhirlpoolFieldMove then return false end
-  local reason = ow:useWhirlpoolFieldMove()
-  if reason ~= "ok" then return false end
+  if not ownedHM(game, "WHIRLPOOL") then return false end
+  
+  -- Flexible check across engine versions
+  local fn = ow.useWhirlpoolFieldMove or ow.useWhirlpool or ow.tryWhirlpool
+  local isWhirl = isFacingWhirlpool(ow)
+  
+  if not (fn or isWhirl) then return false end
+
+  local reason
+  if fn then reason = fn(ow) end
+  if reason == nil and isWhirl then reason = "ok" end
+
+  if reason ~= "ok" and reason ~= true then return false end
 
   if not hasBadge(game, "WHIRLPOOL") then
     pushText(game, badgeRequired(game))
@@ -891,14 +468,23 @@ local function tryWhirlpool(game, ow)
   if not getEligibleMon(game, "WHIRLPOOL") then return false end
 
   local fx, fy = ow.player:facingCell()
-  ow:tryWhirlpool(fx, fy)
+  if ow.tryWhirlpool then 
+    ow:tryWhirlpool(fx, fy) 
+  elseif ow.dispelWhirlpool then
+    ow:dispelWhirlpool(fx, fy)
+  elseif ow.interactWhirlpool then
+    ow:interactWhirlpool(fx, fy)
+  end
   return true
 end
 
 local function tryWaterfall(game, ow)
-  if not ownedHM(game, "WATERFALL") or not ow.useWaterfallFieldMove then return false end
-  local reason = ow:useWaterfallFieldMove()
-  if reason ~= "ok" then return false end
+  if not ownedHM(game, "WATERFALL") then return false end
+  local fn = ow.useWaterfallFieldMove or ow.useWaterfall or ow.tryWaterfall
+  if not fn then return false end
+
+  local reason = fn(ow)
+  if reason ~= "ok" and reason ~= true then return false end
 
   if not hasBadge(game, "WATERFALL") then
     pushText(game, badgeRequired(game))
@@ -907,7 +493,7 @@ local function tryWaterfall(game, ow)
 
   if not getEligibleMon(game, "WATERFALL") then return false end
 
-  ow:tryWaterfall()
+  if ow.tryWaterfall then ow:tryWaterfall() end
   return true
 end
 
@@ -923,7 +509,10 @@ end
 
 local function trySurf(game, ow)
   if not ownedHM(game, "SURF") then return false end
-  local reason = ow:useSurfFieldMove()
+  local fn = ow.useSurfFieldMove or ow.useSurf
+  if not fn then return false end
+
+  local reason = fn(ow)
   if reason == "no_water" or reason == "forced_bike" or reason == "current" then
     return false
   end
@@ -940,7 +529,7 @@ local function trySurf(game, ow)
 
   if reason == "ok" then
     local fx, fy = ow.player:facingCell()
-    ow:trySurf(fx, fy)
+    if ow.trySurf then ow:trySurf(fx, fy) end
     return true
   elseif reason == "dismount" then
     dismountSurf(game, ow)
@@ -966,15 +555,16 @@ local function contextualInteract(game, mod, baseInteract, ow, ...)
     return baseInteract(ow, ...)
   end
 
+  -- Check interactions that can occupy target cells before standard NPC interaction
   if tryStrength(game, ow) then return end
+  if tryWhirlpool(game, ow) then return end
+  if tryCut(game, ow) then return end
+  if tryRockSmash(game, ow) then return end
 
   if directNpcAhead(ow) then
     return baseInteract(ow, ...)
   end
 
-  if tryCut(game, ow) then return end
-  if tryRockSmash(game, ow) then return end
-  if tryWhirlpool(game, ow) then return end
   if tryWaterfall(game, ow) then return end
   if trySurf(game, ow) then return end
 
@@ -1007,9 +597,10 @@ local function rockSmashFromMenu(game, reopen)
   if not hasBadge(game, "ROCK_SMASH") then pushText(game, badgeRequired(game), reopen); return end
   if not getEligibleMon(game, "ROCK_SMASH") then pushText(game, "No Pokémon can\nuse ROCK SMASH.", reopen); return end
 
-  if ow.useRockSmashFieldMove and ow:useRockSmashFieldMove() == "ok" then
+  local fn = ow.useRockSmashFieldMove or ow.useRockSmash
+  if fn and fn(ow) == "ok" then
     local fx, fy = ow.player:facingCell()
-    ow:tryRockSmash(fx, fy)
+    if ow.tryRockSmash then ow:tryRockSmash(fx, fy) end
   else
     pushText(game, "It's a smashable\nrock.", reopen)
   end
@@ -1021,10 +612,11 @@ local function cutFromMenu(game, reopen)
   if not hasBadge(game, "CUT") then pushText(game, badgeRequired(game), reopen); return end
   if not getEligibleMon(game, "CUT") then pushText(game, "No Pokémon can\nuse CUT.", reopen); return end
 
-  local reason = ow:useCutFieldMove()
+  local fn = ow.useCutFieldMove or ow.useCut
+  local reason = fn and fn(ow)
   if reason == "ok" then
     local fx, fy = ow.player:facingCell()
-    ow:tryCut(fx, fy)
+    if ow.tryCut then ow:tryCut(fx, fy) end
   else
     pushText(game, textOr(game, "_NothingToCutText", "Nothing to CUT!"), reopen)
   end
@@ -1036,10 +628,11 @@ local function surfFromMenu(game, reopen)
   if not hasBadge(game, "SURF") then pushText(game, badgeRequired(game), reopen); return end
   if not getEligibleMon(game, "SURF") then pushText(game, "No Pokémon can\nuse SURF.", reopen); return end
 
-  local reason = ow:useSurfFieldMove()
+  local fn = ow.useSurfFieldMove or ow.useSurf
+  local reason = fn and fn(ow)
   if reason == "ok" then
     local fx, fy = ow.player:facingCell()
-    ow:trySurf(fx, fy)
+    if ow.trySurf then ow:trySurf(fx, fy) end
   elseif reason == "dismount" then
     dismountSurf(game, ow)
   elseif reason == "no_place" then
@@ -1108,9 +701,22 @@ local function whirlpoolFromMenu(game, reopen)
   if not hasBadge(game, "WHIRLPOOL") then pushText(game, badgeRequired(game), reopen); return end
   if not getEligibleMon(game, "WHIRLPOOL") then pushText(game, "No Pokémon can\nuse WHIRLPOOL.", reopen); return end
   
-  if ow.useWhirlpoolFieldMove and ow:useWhirlpoolFieldMove() == "ok" then
+  local fn = ow.useWhirlpoolFieldMove or ow.useWhirlpool or ow.tryWhirlpool
+  local isWhirl = isFacingWhirlpool(ow)
+  local reason
+
+  if fn then reason = fn(ow) end
+  if reason == nil and isWhirl then reason = "ok" end
+
+  if reason == "ok" or reason == true then
     local fx, fy = ow.player:facingCell()
-    ow:tryWhirlpool(fx, fy)
+    if ow.tryWhirlpool then 
+      ow:tryWhirlpool(fx, fy) 
+    elseif ow.dispelWhirlpool then
+      ow:dispelWhirlpool(fx, fy)
+    elseif ow.interactWhirlpool then
+      ow:interactWhirlpool(fx, fy)
+    end
   else
     pushText(game, "It's a vicious\nwhirlpool!", reopen)
   end
@@ -1122,8 +728,9 @@ local function waterfallFromMenu(game, reopen)
   if not hasBadge(game, "WATERFALL") then pushText(game, badgeRequired(game), reopen); return end
   if not getEligibleMon(game, "WATERFALL") then pushText(game, "No Pokémon can\nuse WATERFALL.", reopen); return end
 
-  if ow.useWaterfallFieldMove and ow:useWaterfallFieldMove() == "ok" then
-    ow:tryWaterfall()
+  local fn = ow.useWaterfallFieldMove or ow.useWaterfall
+  if fn and fn(ow) == "ok" then
+    if ow.tryWaterfall then ow:tryWaterfall() end
   else
     pushText(game, "A wall of water is\ntumbling down.", reopen)
   end
@@ -1183,9 +790,12 @@ local function openHMMenu(game, mod)
   items[#items + 1] = contextItem
 
   game.stack:push(Menu.new(game, items, {
-    tx = 10,
+    tx = 9,
     ty = 0,
-    tw = 10,
+    tw = 11,
+    th = 18,
+    maxVisible = 8,
+    anchor = "topright",
     onCancel = function()
       Screens.push(game, "StartMenu")
     end,
@@ -1229,7 +839,6 @@ return function(mod)
       return contextualInteract(game, mod, dispatch.baseInteract, ow, ...)
     end
 
-    -- Require Item Ownership + Badge + Party Species Compatibility
     dispatch.partyKnows = function(_, moveId)
       if FIELD_HMS[moveId] and ownedHM(game, moveId) and hasBadge(game, moveId) then
         local mon = getEligibleMon(game, moveId)
